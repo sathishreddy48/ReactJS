@@ -1,14 +1,19 @@
 import React from 'react'
 export default class ChildComponent extends React.Component
 {
-   
-    constructor()
-    {
+    constructor(){
         super();
         this.state={
             Open:true
         }
         this.onclick = this.onclick.bind(this);
+   }
+   componentWillMount()
+   {
+       console.log('Child Component : componentWillMount');    
+   }
+   componentDidMount() {
+    console.log('Child Component : componentDidMount');
    }
     onclick()
     {
@@ -27,16 +32,26 @@ export default class ChildComponent extends React.Component
         );  
                  
     }
+    componentDidUpdate(prevProps,prevState,snapshot)
+    {
+        console.log('Child Component : componentDidUpdate')
+    }
+    componentWillUnmount()
+    {
+        console.log('Child Component : componentWillUnmount')
+    }
     
 }
 const Styles={
     Open:{ 
         color:'Green',
-        fontSize:80
+        fontSize:30,
+       // display:'block'
  },
     Close:{
         color:'Red',
-        fontSize:80
+        fontSize:30,
+       // display:'none'
 
 }
             
