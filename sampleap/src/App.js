@@ -8,7 +8,7 @@ class App extends Component {
     return (
        <div>
           <MyComponent></MyComponent>
-          <MyComponent></MyComponent>
+          {/* <MyComponent></MyComponent> */}
        </div>
     );
   }
