@@ -1,18 +1,19 @@
 import React from 'react'
+import GrandChild from './GrandChild';
 export default class ChildComponent extends React.Component
 {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state={
-            Open:true,
-            cdata:{
-                //movies:[id, title, releaseYear]
-                movies :{ }
-    
-            },
-            csample:''
+            Open:true,           
+            csample:'',
+           // movies :this.props.movies,
+            movies :this.props.movies,
+            ID:this.props.ID,
+            SystemName:this.props.SystemName,
+            BatchNames:[]
         }
-        this.onclick = this.onclick.bind(this);
+       this.onclick = this.onclick.bind(this);
    }
    componentWillMount()
    {
@@ -22,48 +23,49 @@ export default class ChildComponent extends React.Component
     console.log('Child Component : componentDidMount');
    }
     onclick()
-    {
-         //fetch('/api/users/2')
-         fetch('https://facebook.github.io/react-native/movies.json')
-         .then((response) => response.json())
-         .then((responseJson) => {
-           this.setState({cdata: responseJson.movies});
-             //this.setState({Open:!this.state.Open})
-         })      
-        //  fetch('http://localhost:52776/Details/1')
-        //  .then((response) => response.json())
-        //  .then((responseJson) => {
-        //      debugger;
-        //    this.setState({sample: responseJson});
-        //      //this.setState({Open:!this.state.Open})
-        //  })
-       
-        this.setState({Open:!this.state.Open})
-        console.log('clicked.')
-        console.log('clicked.'+this.state.Open)
-        console.log('data'+this.state.csample)
+    { 
+        let SystemName=this.props.SystemName;
+        fetch('http://localhost:54025/GetBatchDetails?SystemName='+SystemName)
+        .then((response) => response.json())
+        .then((responseJson) => {
+            debugger;
+            this.setState({BatchNames: responseJson.BatchesDetails});           
+        }).then
+        (()=>{
+                 this.setState({Open:this.state.Open});
+                 console.log('Parent Component clicked.');
+                console.log('Child Component clicked.');
+                console.log('clicked.'+this.state.Open)  ;   
+                console.log('ID '+this.state.ID);
+                this.state.BatchNames.map(b=>
+                    console.log('BatchNames '+b.BatchName)
+            );
+              
+            }
+      )
     }
     render()
     {
-      
         return(
             <div>
-            <p onClick={this.onclick} style={this.state.Open?Styles.Open:Styles.Close}>
-            Child Component</p>
-            <div>
-              {/* {this.state.cdata.movies} */}
-              {this.state.csample}
-            </div>
-            {/* {this.state.cdata.movies.map((item, index) => {
-                 return <div key={index}>{item.title}</div>;
-             })} */}
+            {/* <p onClick={this.onclick} style={this.state.Open?Styles.Open:Styles.Close}>
+            Child Component</p> */}
+             {/* <ul>
+               {this.state.movies.map(movie=><li key={movie.id}>{movie.title}</li> )}
+            </ul> */}
+             <p onClick={this.onclick.bind(this)}>{this.props.SystemName}</p> 
+             {this.state.BatchNames.map(Batch=>
+                    
+               <GrandChild  BatchName={Batch.BatchName}>              
+              </GrandChild>
+             )
+             }
             </div>
         );  
                  
     }
     componentDidUpdate(prevProps,prevState,snapshot)
-    {
-       
+    {       
         console.log('Child Component : componentDidUpdate')
     }
     componentWillUnmount()

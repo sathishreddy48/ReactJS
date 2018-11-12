@@ -1,68 +1,58 @@
 import React from 'react'
 import ChildComponent from './ChildComponent'
 export default class MyComponent extends React.Component
-{
-   
-    constructor()
-    {
-        super();
+{  
+    constructor(props) {
+        super(props);
         this.state={
-            Open:true,
-            data:{ 
-                description:'',
-                //movies:[id, title, releaseYear]
-                movies :{id:'',title:'',releaseYear:''} ,            
-                title:''
-            },
+            Open:true,           
             sample:'',
-            movies :[]
+            movies :[],
+            ID:'',
+            Systems:[]
         }
         this.onclick = this.onclick.bind(this);
+       // this.MyComponent = this.MyComponent.bind(this);
    }
    componentWillMount()
    {
        console.log('Parent Component : componentWillMount');    
    }
-   componentDidMount() {
+    componentDidMount() {
     console.log('Parent Component : componentDidMount');
    }
     onclick()
     {
-         //fetch('/api/users/2')
-         fetch('https://facebook.github.io/react-native/movies.json')
-         .then((response) => response.json())
-         .then((responseJson) => {
-             debugger;
-           this.setState({movies: responseJson.movies});
-             //this.setState({Open:!this.state.Open})
-         })
-        //  fetch('http://localhost:52776/Details/1')
-        //  .then((response) => response.json())
-        //  .then((responseJson) => {
-        //      debugger;
-        //    this.setState({sample: responseJson});
-        //      //this.setState({Open:!this.state.Open})
-        //  })
-       
-        this.setState({Open:!this.state.Open})
-        console.log('clicked.')
-        console.log('clicked.'+this.state.Open)
-        console.log('data'+this.state.movies)
-        //console.log('data'+this.state.data.length)
+        this.setState({Open:!this.state.Open});
+        console.log('Parent Component clicked.');
+        console.log('Parent Component '+this.state.Systems);
+        const SystemsList = [{ ID:1,SystemTag: 'CLP' }, 
+        { ID:2, SystemTag: 'ECDM' },
+        { ID:3,SystemTag: 'MSQ' },
+        { ID:4,SystemTag: 'POET' },
+         {ID:5, SystemTag: 'PQ' }];
+         this.setState({Systems:SystemsList});
     }
+    // MyComponent()
+    // {
+    //     const SystemsList = [{ ID:1,SystemTag: 'CLP' }, 
+    //     { ID:2, SystemTag: 'ECDM' },
+    //     { ID:3,SystemTag: 'MSQ' },
+    //     { ID:4,SystemTag: 'POET' },
+    //      {ID:5, SystemTag: 'PQ' }];
+    //      this.setState({Systems:SystemsList});
+    // }
     render(){
+       
         return(
             <div>
             <p onClick={this.onclick} style={this.state.Open?Styles.Open:Styles.Close}>
-            My Component</p>
-            <div>
-              {/* {this.state.data.movies} */}
-              {this.state.sample}
-            </div>
-            <ul>
-            {this.state.movies.map(movie=><li key={movie.id}>{movie.title}</li> )}
-            </ul>
-            <ChildComponent></ChildComponent>
+            My Component</p>         
+                 {this.state.Systems.map(System=>            
+                <ChildComponent onClick={this.onclick.bind(this)} ID={System.ID} SystemName={System.SystemTag}  Open={this.state.Open}>
+                 </ChildComponent>
+            )
+            }
             </div>
         );                 
     }
@@ -77,14 +67,12 @@ export default class MyComponent extends React.Component
     
 }
 const Styles={
-    Open:{ 
-        color:'Green',
-        fontSize:30
- },
-    Close:{
-        color:'Red',
-        fontSize:30
-
-}
-            
+              Open:{ 
+                 color:'Green',
+                 fontSize:30
+            },
+             Close:{
+                color:'Red',
+                fontSize:30
+  }            
 }
